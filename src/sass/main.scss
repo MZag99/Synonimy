@@ -1,0 +1,16 @@
+//UTILITY//
+@import "_mixins.scss";
+@import "_fonts.scss";
+
+//BASE STYLES//
+@import "_vars.scss";
+@import "_base.scss";
+@import "_module.scss";
+
+//MODULES//
+@import "_hero.scss";
+@import "_footer.scss";
+
+//COMPONENTS//
+@import "_searchbar.scss";
+

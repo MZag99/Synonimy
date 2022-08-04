@@ -1,0 +1,85 @@
+.hero {
+    width: 100%;
+    height: 100%;
+    padding-top: calc(#{$header-height} + 100px);
+    @include flex(column, center, center);
+
+    &__header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding: 20px 100px;
+        @include flex(row, space-between, center);
+        width: 100%;
+        background: $color-white;
+        box-shadow: 1px 1px 5px $color-gray-text;
+        height: $header-height;
+    }
+
+    &__disclaimer {
+        margin-top: 10px;
+        color: $color-gray-medium;
+        font-size: 13px;
+        max-width: 700px;
+        text-align: center;
+        line-height: 1.4;
+    }
+
+    &__nav-list {
+        @include flex(row, space-around, center);
+        width: 40%;
+    }
+
+    &__nav-item {
+        position: relative;
+        display: inline-block;
+        letter-spacing: -0.5px;
+        font-size: 16px;
+        color: $color-black;
+        
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: -5px;
+            height: 1px;
+            width: 100%;
+            background: $color-gray-medium;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s $ease-out;
+        }
+
+        &.decorated {
+            font-weight: 700;
+            color: white;
+            padding: 7px 12px;
+            background: $color-persian-green;
+            border-radius: 10px;
+
+            &:after {
+                display: none;
+            }
+        }
+
+        &:hover {
+            &:after {
+                transform-origin: left;
+                transform: scaleX(1);
+            }
+        }
+    }
+
+    h1 {
+        font-size: 30px;
+        margin: 0;
+        letter-spacing: -2px;
+    }
+
+    h2 {
+        margin: 0;
+        font-weight: 400;
+        font-size: 14px;
+        color: $color-gray-medium;
+    }
+}

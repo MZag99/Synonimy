@@ -1,0 +1,67 @@
+// FUNCTIONS //
+@function strip-units($value) {
+    @return $value / ($value * 0 + 1);
+}
+
+// MIXINS //
+
+$browser-context: 16px;
+$line-height: 1.4;
+
+@mixin font-size($size: $browser-context, $line: $line-height) {
+    font-size: strip-units($size) + px;
+    font-size: (strip-units($size) / strip-units($browser-context)) + rem;
+    line-height: $line + px;
+}
+
+@mixin z-index($element, $list: $elements) {
+    z-index: z($list, $element);
+}
+
+@function z($list, $element) {
+    $z-index: index($list, $element);
+
+    @if $z-index {
+        @return $z-index;
+    }
+
+    @warn 'There is no item "#{$element}" in this list; choose one of: #{$list}';
+    @return null;
+}
+
+@mixin flex($direction: row, $justify: center, $align: center, $flex: flex) {
+    display: $flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}
+
+
+@function vw($size, $bp: desktop, $max: true) {
+    $layouts: (
+        desktop: 1400,
+        tablet: 768,
+        phone: 375,
+    );
+
+    @if map-has-key($layouts, $bp) {
+        @return strip-units($size) / map-get($layouts, $bp) * 100vw;
+    } @else {
+        @warn "Unfortunately, no value could be retrieved from #{$bp}.";
+    }
+}
+
+
+@function vh($size, $bp: desktop) {
+    $layouts: (
+        desktop: 700,
+        tablet: 1024,
+        phone: 667,
+    );
+
+    @if map-has-key($layouts, $bp) {
+        @return strip-units($size) / map-get($layouts, $bp) * 100vh;
+    } @else {
+        @warn "Unfortunately, no value could be retrieved from #{$bp}.";
+    }
+}

@@ -1,0 +1,16 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: $font-main;
+    margin: 0;
+    background-color: $color-secondary;
+    color: $color-text;
+    overflow: overlay;
+    overflow-x: hidden;
+}
+
+a {
+    cursor: pointer;
+}
