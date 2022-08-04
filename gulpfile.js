@@ -72,20 +72,19 @@ function watch() {
         }
     });
     gulp.watch('src/sass/*.scss', styles);
-    gulp.watch('src/ts/*.ts').on('change', tsCompile);
-    gulp.watch('src/js/*.js').on('change', series(jsCopy, tsCompile));
-    gulp.watch('src/js/*.js').on('change', browserSync.reload);
-    gulp.watch('src/ts/*.ts').on('change', browserSync.reload);
+    gulp.watch('src/ts/**/*.ts').on('change', tsCompile);
+    gulp.watch('src/js/*.js').on('change', series(jsCopy));
     gulp.watch('./data.json').on('change', compileHandlebars);
     gulp.watch('src/views/**/*.hbs').on('change', compileHandlebars);
     gulp.watch('dist/*.html').on('change', browserSync.reload);
+    gulp.watch('dist/js/*.js').on('change', browserSync.reload);
 }
 
 function images() {
     return gulp.src('src/media/**/*').pipe(gulp.dest('./dist/media'));
 }
 
-function babelImages() {
+function copyPublicAssets() {
     return gulp.src('public/*').pipe(gulp.dest('./dist/public'));
 }
 
@@ -122,11 +121,10 @@ exports.watch = series(
     clear,
     tsCompile,
     compileHandlebars,
-    jsCopy,
     styles,
     fonts,
     images,
-    babelImages,
+    copyPublicAssets,
     watch
 );
 exports.build = series(
@@ -135,6 +133,7 @@ exports.build = series(
     compileHandlebars,
     styles,
     fonts,
+    copyPublicAssets,
     images
 );
 exports.clear = clear;

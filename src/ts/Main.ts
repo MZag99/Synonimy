@@ -8,12 +8,13 @@ export class Main {
 
     constructor() {
         this.text = 'Page script initialized!';
-        this.scroll = new Scroll();
-        this.components = new Components();
     }
 
     public init = (): void => {
         console.log(this.text);
+
+        this.scroll = new Scroll();
+        this.components = new Components();
     };
 }
 
