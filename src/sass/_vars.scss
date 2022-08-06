@@ -1,6 +1,7 @@
 $color-primary: #212121;
 $color-secondary: #ececec;
 
+$color-pale: #efefef;
 $color-gray-text: #b3b3b3;
 $color-gray-medium: #777;
 $color-persian-green: #1EA896;
@@ -17,4 +18,4 @@ $header-height: 77px;
 // Easing
 $ease-out: cubic-bezier(.17,.67,.32,.87);
 
-$elements: content, header;
+$elements: dropdown, content, header;

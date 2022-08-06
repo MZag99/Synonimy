@@ -1,4 +1,9 @@
 <form class='searchbar' data-component='Searchbar'>
-    <input type='text' placeholder='Wyszukaj synonim...' />
-    <img class='searchbar__icon' src='../../../media/glass.svg' alt='search' />
+    <input class='js-search-input' type='text' placeholder='Wyszukaj synonim...' />
+    <p class='searchbar__error'>Wpisz hasło wyszukiwania!</p>
+    <img class='searchbar__icon js-search' src='../../../media/glass.svg' alt='search' />
+    <div class='searchbar__dropdown js-search-dropdown'>
+        <ul class='js-search-list'>
+        </ul>
+    </div>
 </form>

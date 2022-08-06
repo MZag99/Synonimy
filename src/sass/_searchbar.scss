@@ -1,5 +1,6 @@
 .searchbar {
     position: relative;
+    z-index: 1;
 
     input {
         padding: 0 20px;
@@ -12,6 +13,14 @@
 
         &::placeholder {
             color: $color-gray-text;
+        }
+
+        &.error {
+            border: 2px solid red;
+
+            + .searchbar__error {
+                display: block;
+            }
         }
     }
 
@@ -28,5 +37,51 @@
         &:hover {
             opacity: 1;
         }
+    }
+
+    &__dropdown {
+        position: absolute;
+        top: 30px;
+        left: 0;
+        width: 100%;
+        height: auto;
+        background: white;
+        z-index: -1;
+        border-radius: 0 0 17px 17px;
+        padding: 20px 0 1%;
+        display: none;
+        box-shadow: 1px 1px 5px $color-gray-text;
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            width: 100%;
+            font-weight: 700;
+            padding: 8px 15px;
+            color: $color-gray-medium;
+            cursor: pointer;
+            transition: color 0.2s linear;
+            border-bottom: 1px solid $color-pale;
+            
+            &:hover {
+                color: $color-black;
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+
+    &__error {
+        @include font-size(13);
+        position: absolute;
+        bottom: -28px;
+        color: red;
+        display: none;
     }
 }

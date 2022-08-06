@@ -1,23 +1,40 @@
-import * as fs from 'fs';
+interface IWordObject {
+    word: string;
+    adjective?: string;
+}
 
 interface IGroupObject {
-    word: string;
-    synonyms: string[];
+    searchWord: IWordObject;
+    synonyms: IWordObject[];
 }
 
 export class Searchbar {
-    public groupArray: IGroupObject;
+    public groupArray: IGroupObject[];
 
+    private filteredTemp: string[];
     private dataString: string;
+    private searchIcon: HTMLElement;
+    private searchInput: HTMLInputElement;
+    private searchDropdown: HTMLElement;
+    private searchList: HTMLUListElement;
+    private isError: boolean;
+    private isFocused: boolean;
 
     constructor(protected view) {
+        this.view = view;
+
         this.init();
     }
 
     private init = async (): Promise<void> => {
+        this.groupArray = [];
+        this.filteredTemp = [];
+
         await this.loadData();
-        console.log('Data loaded!');
         this.formatData();
+
+        this.getElems();
+        this.bind();
     };
 
     private loadData = async (): Promise<void> => {
@@ -30,7 +47,7 @@ export class Searchbar {
                         resolve();
                     });
             } catch (err) {
-                console.log(err);
+                console.error(err);
             }
         });
     };
@@ -59,7 +76,102 @@ export class Searchbar {
                 }
             });
 
-            console.log(objectArray);
+            const groupObject = {
+                searchWord: objectArray[0],
+                synonyms: objectArray.slice(1)
+            };
+
+            this.groupArray.push(groupObject);
         });
+    };
+
+    private getElems = (): void => {
+        this.searchIcon = this.view.querySelector('.js-search');
+        this.searchInput = this.view.querySelector('.js-search-input');
+        this.searchDropdown = this.view.querySelector('.js-search-dropdown');
+        this.searchList = this.view.querySelector('.js-search-list');
+    };
+
+    private bind = (): void => {
+        this.searchInput.addEventListener('focus', this.handleFocus);
+        this.searchInput.addEventListener('blur', this.handleFocus);
+        this.searchInput.addEventListener('input', this.handleChange);
+        this.searchIcon.addEventListener('click', this.handleSearch);
+    };
+
+    private handleSearch = (): void => {
+        if (!this.searchInput.value) {
+            this.searchInput.classList.add('error');
+            this.isError = true;
+        }
+
+        const searchPhrase = this.searchInput.value;
+
+        const results = this.groupArray.filter(
+            (el) => el.searchWord.word === searchPhrase
+        );
+
+        console.log(results);
+    };
+
+    private handleChange = (): void => {
+        this.toggleDropdown();
+        this.searchList.innerHTML = '';
+
+        const searchPhrase = this.searchInput.value;
+
+        this.filteredTemp = this.groupArray
+            .filter((el) =>
+                el.searchWord.word
+                    .toLowerCase()
+                    .startsWith(searchPhrase.toLowerCase())
+            )
+            .map((el) => el.searchWord.word);
+
+        this.filteredTemp.forEach((el) => {
+            if (this.searchList.children.length > 5) {
+                return;
+            }
+
+            const liEl = document.createElement('li');
+            liEl.innerText = el;
+            this.searchList.appendChild(liEl);
+        });
+
+        if (!this.filteredTemp.length) {
+            this.toggleDropdown(true);
+        }
+    };
+
+    private toggleDropdown = (hide?: boolean): void => {
+        if (!this.searchInput.value || hide) {
+            this.searchDropdown.style.display = 'none';
+        } else {
+            this.searchDropdown.style.display = 'block';
+        }
+    };
+
+    private handleFocus = (): void => {
+        if (!this.isFocused) {
+            this.view.classList.add('is-focused');
+            this.isFocused = true;
+            this.removeError();
+
+            this.toggleDropdown();
+        } else {
+            this.view.classList.remove('is-focused');
+            this.isFocused = false;
+
+            this.toggleDropdown(true);
+        }
+    };
+
+    private removeError = (): void => {
+        if (!this.isError) {
+            return;
+        }
+
+        this.isError = false;
+        this.searchInput.classList.remove('error');
     };
 }

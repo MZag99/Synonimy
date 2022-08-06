@@ -17,7 +17,7 @@
     }
 
     &__disclaimer {
-        margin-top: 10px;
+        margin-top: 20px;
         color: $color-gray-medium;
         font-size: 13px;
         max-width: 700px;
@@ -28,6 +28,8 @@
     &__nav-list {
         @include flex(row, space-around, center);
         width: 40%;
+        max-width: 500px;
+        min-width: 400px;
     }
 
     &__nav-item {
@@ -36,7 +38,7 @@
         letter-spacing: -0.5px;
         font-size: 16px;
         color: $color-black;
-        
+
         &:after {
             content: '';
             display: block;
