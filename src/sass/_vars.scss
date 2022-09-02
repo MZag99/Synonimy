@@ -14,8 +14,11 @@ $color-background: $color-white;
 
 // Sizes
 $header-height: 77px;
+$default-radius: 10px;
+$default-box-shadow: 1px 1px 5px $color-gray-text;
+$default-letter-spacing: -0.5px;
 
 // Easing
-$ease-out: cubic-bezier(.17,.67,.32,.87);
+$ease-out: cubic-bezier(.17, .67, .32, .87);
 
 $elements: dropdown, content, header;

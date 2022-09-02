@@ -1,29 +1,13 @@
-.hero {
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px 100px;
+    @include flex(row, space-between, center);
     width: 100%;
-    height: 100%;
-    padding-top: calc(#{$header-height} + 100px);
-    @include flex(column, center, center);
-
-    &__header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        padding: 20px 100px;
-        @include flex(row, space-between, center);
-        width: 100%;
-        background: $color-white;
-        box-shadow: 1px 1px 5px $color-gray-text;
-        height: $header-height;
-    }
-
-    &__disclaimer {
-        margin-top: 20px;
-        color: $color-gray-medium;
-        font-size: 13px;
-        max-width: 700px;
-        text-align: center;
-        line-height: 1.4;
-    }
+    background: $color-white;
+    box-shadow: 1px 1px 5px $color-gray-text;
+    height: $header-height;
 
     &__nav-list {
         @include flex(row, space-around, center);
@@ -57,7 +41,7 @@
             color: white;
             padding: 7px 12px;
             background: $color-persian-green;
-            border-radius: 10px;
+            border-radius: $default-radius;
 
             &:after {
                 display: none;
@@ -70,6 +54,11 @@
                 transform: scaleX(1);
             }
         }
+    }
+
+    a {
+        text-decoration: none;
+        color: initial;
     }
 
     h1 {

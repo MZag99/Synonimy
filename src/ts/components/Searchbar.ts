@@ -1,3 +1,6 @@
+import Router from '../Router';
+import { routerInstance } from '../Main';
+
 interface IWordObject {
     word: string;
     adjective?: string;
@@ -83,6 +86,7 @@ export class Searchbar {
 
             this.groupArray.push(groupObject);
         });
+        console.log(this.groupArray);
     };
 
     private getElems = (): void => {
@@ -96,6 +100,7 @@ export class Searchbar {
         this.searchInput.addEventListener('focus', this.handleFocus);
         this.searchInput.addEventListener('blur', this.handleFocus);
         this.searchInput.addEventListener('input', this.handleChange);
+
         this.searchIcon.addEventListener('click', this.handleSearch);
     };
 
@@ -129,12 +134,23 @@ export class Searchbar {
             .map((el) => el.searchWord.word);
 
         this.filteredTemp.forEach((el) => {
-            if (this.searchList.children.length > 5) {
+            const childrenArray = Array.from(
+                this.searchList.children
+            ) as HTMLElement[];
+
+            if (
+                childrenArray.length > 5 ||
+                childrenArray.some((item) => item.innerText === el)
+            ) {
                 return;
             }
 
             const liEl = document.createElement('li');
             liEl.innerText = el;
+            liEl.addEventListener('click', () => {
+                console.log('sraka');
+                routerInstance.itemRoute(liEl);
+            });
             this.searchList.appendChild(liEl);
         });
 
@@ -159,10 +175,12 @@ export class Searchbar {
 
             this.toggleDropdown();
         } else {
-            this.view.classList.remove('is-focused');
-            this.isFocused = false;
+            setTimeout(() => {
+                this.view.classList.remove('is-focused');
+                this.isFocused = false;
 
-            this.toggleDropdown(true);
+                this.toggleDropdown(true);
+            }, 200);
         }
     };
 

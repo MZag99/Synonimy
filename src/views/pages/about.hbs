@@ -1,0 +1,5 @@
+{{#each items}}
+<div class="module module--{{type}}">
+    {{> (lookup . 'type') }}
+</div>
+{{/each}}
