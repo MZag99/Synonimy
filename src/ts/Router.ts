@@ -11,16 +11,22 @@ export default class Router {
 
         this.page = document.querySelector('#page')!;
         this.bind();
-        this.handleLocation();
+
+        if (window.location.pathname !== '/') {
+            this.handleLocation();
+        }
     }
 
     private bind = (): void => {
-        window.onpopstate = this.handleLocation;
+        (window as any).onpopstate = this.handleLocation;
+        (window as any).route = this.route;
     };
 
-    public itemRoute = (arg: HTMLElement): void => {
+    public itemRoute = (arg: HTMLElement | string): void => {
         window.history.pushState({}, '', '/synonim');
-        window.location.search = `word=${arg.innerText}`;
+        window.location.hash = `${
+            typeof arg === 'string' ? arg : arg.innerText
+        }`;
 
         this.handleLocation();
     };
@@ -31,18 +37,26 @@ export default class Router {
 
         event.preventDefault();
         window.history.pushState({}, '', target.href);
-        this.handleLocation();
-    };
 
-    public handleLocation = async () => {
         if (window.location.pathname === '/') {
+            location.reload();
             return;
         }
 
+        this.handleLocation();
+    };
+
+    public handleLocation = async (): Promise<void> => {
         const path = window.location.pathname;
         const route = this.routes[path] || this.routes[404];
         const html = await fetch(route).then((data) => data.text());
 
         this.page.innerHTML = html;
+
+        if (route === '/view.html') {
+            const e = new Event('wordviewactive');
+
+            window.dispatchEvent(e);
+        }
     };
 }

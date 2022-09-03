@@ -1,21 +1,11 @@
 import Router from '../Router';
 import { routerInstance } from '../Main';
-
-interface IWordObject {
-    word: string;
-    adjective?: string;
-}
-
-interface IGroupObject {
-    searchWord: IWordObject;
-    synonyms: IWordObject[];
-}
+import DataHandler, { IGroupObject, dataInstance } from '../DataHandler';
 
 export class Searchbar {
-    public groupArray: IGroupObject[];
+    public results: IGroupObject[];
 
     private filteredTemp: string[];
-    private dataString: string;
     private searchIcon: HTMLElement;
     private searchInput: HTMLInputElement;
     private searchDropdown: HTMLElement;
@@ -30,63 +20,10 @@ export class Searchbar {
     }
 
     private init = async (): Promise<void> => {
-        this.groupArray = [];
         this.filteredTemp = [];
-
-        await this.loadData();
-        this.formatData();
 
         this.getElems();
         this.bind();
-    };
-
-    private loadData = async (): Promise<void> => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                fetch('public/data.txt')
-                    .then((response) => response.text())
-                    .then((data) => {
-                        this.dataString = data;
-                        resolve();
-                    });
-            } catch (err) {
-                console.error(err);
-            }
-        });
-    };
-
-    private formatData = (): void => {
-        if (!this.dataString) {
-            console.error('Unable to format data!');
-            return;
-        }
-
-        const splitString = this.dataString.split('\n');
-
-        splitString.forEach((item) => {
-            const splitItem = item.split(';');
-            const objectArray = splitItem.map((el) => {
-                // CHECK FOR ADJECTIVE
-                if (el.includes('(') && el.includes(')')) {
-                    return {
-                        word: el.replace(/ *\([^)]*\) */g, ''),
-                        adjective: el.split('(').pop().split(')')[0]
-                    };
-                } else {
-                    return {
-                        word: el
-                    };
-                }
-            });
-
-            const groupObject = {
-                searchWord: objectArray[0],
-                synonyms: objectArray.slice(1)
-            };
-
-            this.groupArray.push(groupObject);
-        });
-        console.log(this.groupArray);
     };
 
     private getElems = (): void => {
@@ -104,19 +41,34 @@ export class Searchbar {
         this.searchIcon.addEventListener('click', this.handleSearch);
     };
 
-    private handleSearch = (): void => {
+    private handleSearch = (e: PointerEvent): void => {
         if (!this.searchInput.value) {
             this.searchInput.classList.add('error');
             this.isError = true;
+            return;
         }
 
-        const searchPhrase = this.searchInput.value;
+        const target = e.target as HTMLElement;
+        const isLink = target.dataset.link !== undefined;
 
-        const results = this.groupArray.filter(
-            (el) => el.searchWord.word === searchPhrase
-        );
+        const searchPhrase = isLink ? target.innerText : this.searchInput.value;
 
-        console.log(results);
+        this.results = Searchbar.filterSynonyms(searchPhrase);
+
+        dataInstance.results = this.results;
+        routerInstance.itemRoute(isLink ? target : this.searchInput.value);
+    };
+
+    /**
+     * Filters synonyms from DataHandler instance
+     * groupArray property based on a
+     * given searchphrase.
+     *
+     * */
+    public static filterSynonyms = (arg: string): IGroupObject[] => {
+        const dataObj = dataInstance as DataHandler;
+
+        return dataObj.groupArray.filter((el) => el.searchWord.word === arg);
     };
 
     private handleChange = (): void => {
@@ -124,8 +76,9 @@ export class Searchbar {
         this.searchList.innerHTML = '';
 
         const searchPhrase = this.searchInput.value;
+        const dataObj = dataInstance as DataHandler;
 
-        this.filteredTemp = this.groupArray
+        this.filteredTemp = dataObj.groupArray
             .filter((el) =>
                 el.searchWord.word
                     .toLowerCase()
@@ -146,10 +99,10 @@ export class Searchbar {
             }
 
             const liEl = document.createElement('li');
+            liEl.dataset.link = 'true';
             liEl.innerText = el;
-            liEl.addEventListener('click', () => {
-                console.log('sraka');
-                routerInstance.itemRoute(liEl);
+            liEl.addEventListener('click', (e) => {
+                this.handleSearch(e as PointerEvent);
             });
             this.searchList.appendChild(liEl);
         });

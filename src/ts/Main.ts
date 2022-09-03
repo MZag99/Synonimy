@@ -2,6 +2,7 @@ import Scroll from './Scroll';
 import Components from './Components';
 import Router from './Router';
 import { WordView } from './components/WordView';
+import DataHandler from './DataHandler';
 
 export let routerInstance;
 export let wordViewInstance;
@@ -11,6 +12,7 @@ export class Main {
     private scroll: Scroll;
     private components: Components;
     private router: Router;
+    private dataHandler: DataHandler;
 
     constructor() {
         this.text = 'Page script initialized!';
@@ -19,6 +21,7 @@ export class Main {
     public init = (): void => {
         console.log(this.text);
 
+        this.dataHandler = new DataHandler();
         this.scroll = new Scroll();
         this.components = new Components();
         this.router = new Router({
@@ -32,6 +35,12 @@ export class Main {
 
         routerInstance = this.router;
         wordViewInstance = new WordView();
+
+        window.addEventListener('textdataloaded', this.toggleLoader);
+    };
+
+    private toggleLoader = (): void => {
+        document.body.classList.add('is-loaded');
     };
 }
 
