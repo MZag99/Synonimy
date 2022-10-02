@@ -39,8 +39,6 @@ export class Searchbar {
     private init = async (): Promise<void> => {
         this.filteredTemp = [];
 
-        console.log('dupa');
-
         this.getElems();
         this.bind();
     };

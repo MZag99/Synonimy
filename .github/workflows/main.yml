@@ -1,0 +1,25 @@
+on:
+  push:
+    branches:
+      - master
+name: Production Deploy
+jobs:
+  FTP-Deploy-Action:
+    name: FTP-Deploy-Action
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get latest code...
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+    - name: Build Project...
+      run: |
+        npm install
+        npm run production
+    - name: Syncing files...
+      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      with:
+        server: s160.cyber-folks.pl
+        username: michal@michalzagojski.pl
+        password: ${{ secrets.PROD_FTP_PASSWORD }}
+        local-dir: ./dist/
