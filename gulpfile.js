@@ -1,18 +1,18 @@
-const gulp = require('gulp'),
-    { series } = require('gulp'),
-    clean = require('gulp-rimraf'),
-    historyApiFallback = require('connect-history-api-fallback'),
-    rename = require('gulp-rename'),
-    browserify = require('browserify'),
-    babelify = require('babelify'),
-    tsify = require('tsify'),
-    sass = require('gulp-sass')(require('sass')),
-    browserSync = require('browser-sync').create(),
-    handlebars = require('gulp-compile-handlebars'),
-    uglify = require('gulp-uglify'),
-    fs = require('fs'),
-    source = require('vinyl-source-stream'),
-    buffer = require('vinyl-buffer');
+const gulp = require('gulp');
+const { series } = require('gulp');
+const clean = require('gulp-rimraf');
+const historyApiFallback = require('connect-history-api-fallback');
+const rename = require('gulp-rename');
+const browserify = require('browserify');
+const babelify = require('babelify');
+const tsify = require('tsify');
+const sass = require('gulp-sass')(require('sass'));
+const browserSync = require('browser-sync').create();
+const handlebars = require('gulp-compile-handlebars');
+const uglify = require('gulp-uglify');
+const fs = require('fs');
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
 
 // Copy html files
 async function compileHandlebars() {
@@ -32,14 +32,14 @@ async function compileHandlebars() {
                 .pipe(handlebars(JSON.parse(content), options))
                 .pipe(rename('index.html'))
                 .pipe(gulp.dest('dist'));
-        } else {
-            content = fs.readFileSync('./data.json', 'utf-8');
-            return gulp
-                .src('./src/views/pages/index.hbs')
-                .pipe(handlebars(JSON.parse(content)))
-                .pipe(rename('index.html'))
-                .pipe(gulp.dest('dist'));
         }
+        content = fs.readFileSync('./data.json', 'utf-8');
+        return gulp
+            .src('./src/views/pages/index.hbs')
+            .pipe(handlebars(JSON.parse(content)))
+            .pipe(rename('index.html'))
+            .pipe(gulp.dest('dist'));
+
     });
 }
 
@@ -50,21 +50,21 @@ function clear() {
 }
 
 function promisifyStream(stream) {
-    return new Promise((resolve) => stream.on('end', resolve));
+    return new Promise(resolve => stream.on('end', resolve));
 }
 
 async function copyPages() {
     const paths = ['about', 'contact', 'info', 'view', '404'];
-    const dataFiles = paths.map((t) => `${t === '404' ? t : `data-${t}`}`);
+    const dataFiles = paths.map(t => `${t === '404' ? t : `data-${t}`}`);
 
     await Promise.all(
-        dataFiles.map((file) => {
+        dataFiles.map(file => {
             let data;
             try {
                 if (file === '404') {
                     return promisifyStream(
                         gulp
-                            .src(`./src/views/pages/404.hbs`)
+                            .src('./src/views/pages/404.hbs')
                             .pipe(handlebars({}))
                             .pipe(rename('404.html'))
                             .pipe(gulp.dest('dist'))
@@ -89,11 +89,11 @@ async function copyPages() {
     );
 }
 // Minify images NOT WORKING
-/*gulp.task('imageMinify', async () => {
+/* gulp.task('imageMinify', async () => {
     return gulp.src('src/images/*')
     .pipe(imagemin())
     .pipe(gulp.dest('dist/images'))
-});*/
+}); */
 
 // Compile sass styles to css
 function styles() {
@@ -181,6 +181,5 @@ exports.build = series(
     styles,
     fonts,
     copyPublicAssets,
-    images
 );
 exports.clear = clear;
