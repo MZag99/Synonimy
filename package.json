@@ -22,9 +22,14 @@
         "tsify": "^5.0.4",
         "typescript": "^4.5.2",
         "vinyl-buffer": "^1.0.1",
-        "vinyl-source-stream": "^2.0.0"
-    },
-    "dependencies": {
+        "vinyl-source-stream": "^2.0.0",
+        "gulp": "^4.0.2",
+        "gulp-compile-handlebars": "^0.6.1",
+        "gulp-rename": "^2.0.0",
+        "gulp-rimraf": "^1.0.0",
+        "gulp-sass": "^5.0.0",
+        "gulp-uglify": "^3.0.2",
+        "handlebars": "^4.7.7",
         "@typescript-eslint/eslint-plugin": "^5.38.1",
         "@typescript-eslint/parser": "^5.38.1",
         "body-parser": "^1.19.0",
@@ -32,16 +37,9 @@
         "common-js": "^0.3.8",
         "connect-history-api-fallback": "^2.0.0",
         "eslint": "^8.24.0",
-        "eslint-config-airbnb-base": "^15.0.0",
-        "gsap": "^3.8.0",
-        "gulp": "^4.0.2",
-        "gulp-compile-handlebars": "^0.6.1",
-        "gulp-image": "^6.3.1",
-        "gulp-imagemin": "^8.0.0",
-        "gulp-rename": "^2.0.0",
-        "gulp-rimraf": "^1.0.0",
-        "gulp-sass": "^5.0.0",
-        "gulp-uglify": "^3.0.2",
-        "handlebars": "^4.7.7"
+        "eslint-config-airbnb-base": "^15.0.0"
+    },
+    "dependencies": {
+        "gsap": "^3.8.0"
     }
 }

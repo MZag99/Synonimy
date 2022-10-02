@@ -180,6 +180,7 @@ exports.build = series(
     copyPages,
     styles,
     fonts,
+    images,
     copyPublicAssets,
 );
 exports.clear = clear;
