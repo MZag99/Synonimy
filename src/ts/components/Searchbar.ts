@@ -235,3 +235,4 @@ export class Searchbar {
         this.searchInput.classList.remove('error');
     };
 }
+
