@@ -1,0 +1,26 @@
+.hamburger {
+    svg {
+        width: vw(30, phone);
+        height: auto;
+        pointer-events: none;
+    }
+
+    &__open,
+    &__close {
+        pointer-events: none;
+    }
+
+    &__open {
+        body.is-menu-open & {
+            display: none;
+        }
+    }
+
+    &__close {
+        display: none;
+
+        body.is-menu-open & {
+            display: block;
+        }
+    }
+}

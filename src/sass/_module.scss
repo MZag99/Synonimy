@@ -6,4 +6,11 @@
     &--hero {
         padding-top: 0;
     }
+
+    &--word,
+    &--text {
+        @include flex(row, center, center);
+        height: auto;
+        min-height: 100vh;
+    }
 }

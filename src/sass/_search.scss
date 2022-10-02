@@ -4,6 +4,8 @@
     padding-top: calc(#{$header-height} + 50px);
     @include flex(column, center, center);
 
+    @include breakpoint(phone) {}
+
     &__disclaimer {
         margin-top: 20px;
         color: $color-gray-medium;

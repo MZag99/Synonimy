@@ -11,6 +11,10 @@
         border: none;
         box-shadow: 1px 1px 5px $color-gray-text;
 
+        @include breakpoint(phone) {
+            width: vw(330, phone);
+        }
+
         &::placeholder {
             color: $color-gray-text;
         }
@@ -34,7 +38,7 @@
         cursor: pointer;
         transition: opacity 0.3s linear;
 
-        &:hover {
+        @include hover {
             opacity: 1;
         }
     }
@@ -51,6 +55,7 @@
         padding: 20px 0 1%;
         display: none;
         box-shadow: $default-box-shadow;
+        overflow: hidden;
 
         ul {
             list-style: none;
@@ -67,8 +72,10 @@
             transition: color 0.2s linear;
             border-bottom: 1px solid $color-pale;
 
-            &:hover {
+            &:hover,
+            &.is-selected {
                 color: $color-black;
+                background: rgba($color-black, 0.01);
             }
 
             &:last-child {

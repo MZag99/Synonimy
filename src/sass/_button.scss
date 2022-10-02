@@ -1,0 +1,53 @@
+.button {
+    position: relative;
+    width: fit-content;
+    font-weight: 700;
+    color: white !important;
+    padding: 6px 11px;
+    background: $color-persian-green;
+    border-radius: $default-radius;
+    border: 2px solid $color-persian-green;
+    overflow: hidden;
+    transition: color 0.3s $ease-out;
+    cursor: pointer;
+    z-index: 1;
+
+    &:before,
+    &:after {
+        content: '';
+        background: $color-white;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transform-origin: bottom;
+        transform: scaleY(0);
+        transition: transform 0.3s $ease-out;
+        z-index: -1;
+    }
+
+    &:after {
+        background: $color-persian-green;
+        width: 105%;
+        transform: none;
+        z-index: -2;
+    }
+
+    a {
+        color: $color-white  !important;
+        transition: color 0.3s $ease-out;
+    }
+
+    @include hover {
+        color: $color-persian-green  !important;
+
+        a {
+            color: $color-persian-green  !important;
+        }
+
+        &:before {
+            transform: scaleY(1);
+        }
+    }
+}

@@ -1,3 +1,4 @@
+/* eslint-disable no-async-promise-executor */
 export interface IGroupObject {
     searchWord: IWordObject;
     synonyms: IWordObject[];
@@ -19,36 +20,41 @@ export default class DataHandler {
         this.groupArray = [];
         dataInstance = this;
 
+        console.log('new data handler!');
+
         this.init();
     }
 
-    private init = async (): Promise<void> => {
-        return new Promise(async (resolve, reject) => {
-            await this.loadData();
-            await this.formatData();
 
-            const e = new Event('textdataloaded');
-            window.dispatchEvent(e);
 
-            resolve();
-        });
-    };
+    private init = async (): Promise<void> => new Promise(async (resolve, reject) => {
+        await this.loadData();
+        await this.formatData();
 
-    private loadData = async (): Promise<void> => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                fetch('public/data.txt')
-                    .then((response) => response.text())
-                    .then((data) => {
-                        this.dataString = data;
+        const e = new Event('textdataloaded');
 
-                        resolve();
-                    });
-            } catch (err) {
-                console.error(err);
-            }
-        });
-    };
+        setTimeout(() => window.dispatchEvent(e), 100);
+
+        resolve();
+    });
+
+
+
+    private loadData = async (): Promise<void> => new Promise(async (resolve, reject) => {
+        try {
+            fetch('/public/data.txt')
+                .then(response => response.text())
+                .then(data => {
+                    this.dataString = data;
+
+                    resolve();
+                });
+        } catch (err) {
+            console.error(err);
+        }
+    });
+
+
 
     private formatData = async (): Promise<void> => {
         if (!this.dataString) {
@@ -58,9 +64,9 @@ export default class DataHandler {
 
         const splitString = this.dataString.split('\n');
 
-        splitString.forEach((item) => {
+        splitString.forEach(item => {
             const splitItem = item.split(';');
-            const objectArray = splitItem.map((el) => {
+            const objectArray = splitItem.map(el => {
                 // CHECK FOR ADJECTIVE
                 if (el.includes('(') && el.includes(')')) {
                     return {
@@ -68,20 +74,19 @@ export default class DataHandler {
                         // @ts-ignore
                         adjective: el.split('(').pop().split(')')[0]
                     };
-                } else {
-                    return {
-                        word: el
-                    };
                 }
+                return { word: el };
+
             });
 
-            const groupObject = {
-                searchWord: objectArray[0],
-                synonyms: objectArray.slice(1)
-            };
+            objectArray.forEach(obj => {
+                const groupObject = {
+                    searchWord: obj,
+                    synonyms: objectArray.filter(objectElem => objectElem !== obj)
+                };
 
-            this.groupArray.push(groupObject);
+                this.groupArray.push(groupObject);
+            });
         });
-        console.log(this.groupArray);
     };
 }

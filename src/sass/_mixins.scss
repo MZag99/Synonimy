@@ -38,30 +38,40 @@ $line-height: 1.4;
 
 
 @function vw($size, $bp: desktop, $max: true) {
-    $layouts: (
-        desktop: 1400,
+    $layouts: (desktop: 1400,
         tablet: 768,
         phone: 375,
     );
 
     @if map-has-key($layouts, $bp) {
         @return strip-units($size) / map-get($layouts, $bp) * 100vw;
-    } @else {
+    }
+
+    @else {
         @warn "Unfortunately, no value could be retrieved from #{$bp}.";
+    }
+}
+
+@mixin hover {
+    @include breakpoint(desktop) {
+        &:hover {
+            @content;
+        }
     }
 }
 
 
 @function vh($size, $bp: desktop) {
-    $layouts: (
-        desktop: 700,
+    $layouts: (desktop: 700,
         tablet: 1024,
         phone: 667,
     );
 
     @if map-has-key($layouts, $bp) {
         @return strip-units($size) / map-get($layouts, $bp) * 100vh;
-    } @else {
+    }
+
+    @else {
         @warn "Unfortunately, no value could be retrieved from #{$bp}.";
     }
 }

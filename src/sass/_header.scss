@@ -8,12 +8,23 @@
     background: $color-white;
     box-shadow: 1px 1px 5px $color-gray-text;
     height: $header-height;
+    @include z-index(header, $elements);
+
+    @include breakpoint(phone) {
+        box-sizing: border-box;
+        width: 100vw;
+        padding: vw(20, phone);
+    }
 
     &__nav-list {
         @include flex(row, space-around, center);
         width: 40%;
         max-width: 500px;
         min-width: 400px;
+
+        @include breakpoint(phone) {
+            display: none;
+        }
     }
 
     &__nav-item {
@@ -37,18 +48,12 @@
         }
 
         &.decorated {
-            font-weight: 700;
-            color: white;
-            padding: 7px 12px;
-            background: $color-persian-green;
-            border-radius: $default-radius;
-
             &:after {
                 display: none;
             }
         }
 
-        &:hover {
+        @include hover {
             &:after {
                 transform-origin: left;
                 transform: scaleX(1);

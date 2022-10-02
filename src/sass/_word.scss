@@ -1,0 +1,109 @@
+@import './text';
+
+.word {
+    @extend .text;
+    width: 700px;
+
+    @include breakpoint(tablet) {
+        width: vw(600, tablet);
+    }
+
+    body.no-word-error & {
+
+        div:not(.word__back, .button, .word__title, .word__icon),
+        h2:not(.word__no-word) {
+            display: none;
+        }
+    }
+
+    body.no-word-error & {
+        &__no-word {
+            display: block;
+        }
+
+        &__icon {
+            display: flex;
+        }
+    }
+
+    &__icon {
+        @include flex(row, center, center);
+        display: none;
+
+        svg {
+            margin-left: 15px;
+            width: 100px;
+            height: auto;
+
+            @include breakpoint(tablet) {
+                width: vw(150, tablet);
+            }
+        }
+    }
+
+    li {
+        margin: vw(10) 0;
+
+        @include breakpoint(phone) {
+            margin: vw(10, phone) 0;
+        }
+
+        @include breakpoint(tablet) {
+            margin: vw(10, tablet) 0;
+        }
+
+        a {
+            color: initial;
+            text-decoration: none;
+        }
+    }
+
+    a {
+        @include hover {
+            color: $color-persian-green;
+            font-weight: bold;
+        }
+    }
+
+    &__no-word {
+        text-align: center;
+        margin: vw(20) 0 vw(30);
+        display: none;
+
+        @include breakpoint(tablet) {
+            margin: vw(20, tablet) 0 vw(30, tablet);
+        }
+
+        @include breakpoint(phone) {
+            margin: vw(20, phone) 0 vw(30, phone);
+        }
+    }
+
+    &__title {
+        a {
+            @include font-size(13, 13);
+            font-style: italic;
+
+            body.no-word-error & {
+                display: none;
+            }
+        }
+    }
+
+    &__back {
+        @include flex(row, center, center);
+        margin-top: vw(30);
+
+        @include breakpoint(phone) {
+            margin-top: vw(30, phone);
+        }
+
+        @include breakpoint(tablet) {
+            margin-top: vw(30, tablet);
+        }
+
+        a {
+            text-decoration: none;
+        }
+    }
+}

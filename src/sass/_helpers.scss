@@ -1,0 +1,17 @@
+.desktop-only {
+    @include breakpoint(not-desktop) {
+        display: none !important;
+    }
+}
+
+.desktop-hide {
+    @include breakpoint(desktop) {
+        display: none !important;
+    }
+}
+
+.phone-only {
+    @include breakpoint(not-phone) {
+        display: none !important;
+    }
+}

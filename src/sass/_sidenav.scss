@@ -1,0 +1,34 @@
+@import './header';
+
+.sidenav {
+
+    @include breakpoint(desktop) {
+        display: none;
+    }
+
+    @include z-index(hamburger, $elements);
+    @extend .header;
+    width: vw(250, phone);
+    height: 100vh;
+    @include flex(column, flex-start, center);
+    position: fixed;
+    top: $header-height;
+    left: unset;
+    right: 0;
+    transform: translateX(100%);
+    transition: transform 0.5s $ease-out;
+
+    body.is-menu-open & {
+        transform: translateX(0);
+    }
+
+    &__nav-list {
+        @include flex(column, space-around, center);
+        padding: 0;
+        list-style: none;
+
+        li {
+            margin: vw(10, phone) 0;
+        }
+    }
+}

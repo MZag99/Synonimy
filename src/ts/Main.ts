@@ -18,6 +18,8 @@ export class Main {
         this.text = 'Page script initialized!';
     }
 
+
+
     public init = (): void => {
         console.log(this.text);
 
@@ -30,14 +32,24 @@ export class Main {
             '/info': '/info.html',
             '/kontakt': '/contact.html',
             '/synonim': '/view.html',
-            404: '/404.html'
+            '404': '/404.html'
         });
 
         routerInstance = this.router;
         wordViewInstance = new WordView();
 
+        window.addEventListener('pagechange', this.handleChange);
         window.addEventListener('textdataloaded', this.toggleLoader);
     };
+
+
+
+    private handleChange = (): void => {
+        document.body.classList.remove('no-word-error');
+        this.components.refresh();
+    };
+
+
 
     private toggleLoader = (): void => {
         document.body.classList.add('is-loaded');

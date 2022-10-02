@@ -17,19 +17,19 @@ export default class Router {
         }
     }
 
-    private bind = (): void => {
-        (window as any).onpopstate = this.handleLocation;
-        (window as any).route = this.route;
-    };
+
 
     public itemRoute = (arg: HTMLElement | string): void => {
-        window.history.pushState({}, '', '/synonim');
-        window.location.hash = `${
-            typeof arg === 'string' ? arg : arg.innerText
-        }`;
+        window.history.pushState(
+            {},
+            '',
+            `/synonim/${typeof arg === 'string' ? arg : arg.innerText}`
+        );
 
         this.handleLocation();
     };
+
+
 
     public route = (e: PointerEvent): void => {
         const event = e || window.event;
@@ -46,17 +46,38 @@ export default class Router {
         this.handleLocation();
     };
 
+
+
     public handleLocation = async (): Promise<void> => {
-        const path = window.location.pathname;
+        let path = window.location.pathname;
+
+        if (path.includes('synonim')) {
+            path = '/synonim';
+        }
+
         const route = this.routes[path] || this.routes[404];
-        const html = await fetch(route).then((data) => data.text());
+        const html = await fetch(route).then(data => data.text());
+
+        if (!this.page) {
+            return;
+        }
 
         this.page.innerHTML = html;
+
+        const event = new Event('pagechange');
+        window.dispatchEvent(event);
 
         if (route === '/view.html') {
             const e = new Event('wordviewactive');
 
             window.dispatchEvent(e);
         }
+    };
+
+
+
+    private bind = (): void => {
+        (window as any).onpopstate = this.handleLocation;
+        (window as any).route = this.route;
     };
 }
