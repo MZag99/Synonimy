@@ -80,12 +80,22 @@ export default class DataHandler {
             });
 
             objectArray.forEach(obj => {
+
+                const fObj = {
+                    word: obj.word.replace('\r', ''),
+                    synonyms: obj.adjective,
+                }
+
                 const groupObject = {
-                    searchWord: obj,
+                    searchWord: fObj,
                     synonyms: objectArray.filter(objectElem => objectElem !== obj)
                 };
 
                 this.groupArray.push(groupObject);
+
+                if (objectArray.filter(el => el.word === 'kumulacja').length > 0) {
+                    console.log(groupObject);
+                }
             });
         });
     };

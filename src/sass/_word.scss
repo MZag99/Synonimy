@@ -1,4 +1,4 @@
-@import './text';
+@import "./text";
 
 .word {
     @extend .text;
@@ -9,7 +9,6 @@
     }
 
     body.no-word-error & {
-
         div:not(.word__back, .button, .word__title, .word__icon),
         h2:not(.word__no-word) {
             display: none;
@@ -41,11 +40,17 @@
         }
     }
 
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
     li {
-        margin: vw(10) 0;
+        display: inline-block;
+        margin: vw(3) vw(5);
 
         @include breakpoint(phone) {
-            margin: vw(10, phone) 0;
+            margin: vw(5, phone);
         }
 
         @include breakpoint(tablet) {
@@ -61,7 +66,6 @@
     a {
         @include hover {
             color: $color-persian-green;
-            font-weight: bold;
         }
     }
 
@@ -87,6 +91,19 @@
             body.no-word-error & {
                 display: none;
             }
+        }
+
+        br {
+            @include breakpoint(desktop) {
+                display: none;
+            }
+        }
+
+        span {
+            margin-top: vw(5);
+            display: inline-block;
+            color: $color-persian-green;
+            font-style: italic;
         }
     }
 

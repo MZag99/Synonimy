@@ -1,6 +1,7 @@
 /* eslint-disable no-return-assign */
 import { dataInstance, IGroupObject, IWordObject } from '../DataHandler';
 import { Searchbar } from './Searchbar';
+import { routerInstance } from '../Main';
 import Utils from '../Utils';
 
 export class WordView {
@@ -16,6 +17,7 @@ export class WordView {
     }
 
     public update = async (): Promise<void> => {
+
         this.getElems();
 
         const url = new URL(window.location.href);
@@ -26,16 +28,35 @@ export class WordView {
             document.body.classList.add('no-word-error');
         }
 
-        this.word.forEach(el => el.innerText = word);
+        this.word.forEach(el => el.innerText = `"${word}"`);
 
-        if (!dataInstance.results) {
-            this.results = Searchbar.filterSynonyms(word);
-        } else {
-            this.results = dataInstance.results;
-        }
+        this.results = Searchbar.filterSynonyms(word);
 
         this.getSynonyms();
-        this.populateList();
+        await this.populateList();
+        this.overrideLinks();
+
+        document.body.classList.add('is-loaded');
+    };
+
+
+
+    private overrideLinks = (): void => {
+        const links = [...this.list.querySelectorAll('a[href]')];
+
+        links.forEach((el:HTMLAnchorElement) => {
+            el.onclick = e => {
+                e.preventDefault();
+                document.body.classList.remove('is-loaded');
+                // Override links behaviour here:
+                const target = e.target as HTMLElement;
+                const searchPhrase = target.innerText;
+                const fSearchPhrase = searchPhrase.replace(/ *\([^)]*\) */g, '');
+
+                this.clearList();
+                routerInstance.itemRoute(fSearchPhrase);
+            }
+        });
     };
 
 
@@ -69,9 +90,17 @@ export class WordView {
 
 
 
-    private populateList = (): void => {
+    private clearList = (): void => {
+        this.list.innerHTML = '';
+        this.synonyms = [];
+    };
+
+
+
+    private populateList = async (): Promise<void> => new Promise((resolve, reject) => {
         this.synonyms.forEach(el => {
             const liEl = document.createElement('li');
+            liEl.innerHTML = '<span style="font-size:25px; margin-right:5px">&#8226;</span>';
             const a = document.createElement('a');
             a.innerHTML = el.word;
             a.href = `/synonim/${el.word}`;
@@ -86,7 +115,9 @@ export class WordView {
             liEl.appendChild(a);
             this.list.appendChild(liEl);
         });
-    };
+
+        setTimeout(() => resolve(), 200);
+    });
 
 
 
