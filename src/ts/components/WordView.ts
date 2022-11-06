@@ -1,6 +1,7 @@
 /* eslint-disable no-return-assign */
 import { dataInstance, IGroupObject, IWordObject } from '../DataHandler';
 import { Searchbar } from './Searchbar';
+import { routerInstance } from '../Main';
 import Utils from '../Utils';
 
 export class WordView {
@@ -70,6 +71,9 @@ export class WordView {
 
 
     private populateList = (): void => {
+
+        this.list.innerHTML = '';
+
         this.synonyms.forEach(el => {
             const liEl = document.createElement('li');
             const a = document.createElement('a');
@@ -82,6 +86,15 @@ export class WordView {
 
                 a.innerHTML += span.innerHTML;
             }
+
+            a.onclick = e => {
+                e.preventDefault();
+
+                const value = a.innerText.replace(/ *\([^)]*\) */g, '');
+                routerInstance.itemRoute(value);
+                console.log(this.results);
+                this.update();
+            };
 
             liEl.appendChild(a);
             this.list.appendChild(liEl);

@@ -36,6 +36,26 @@ export class Searchbar {
 
 
 
+    public handleSearch = (e?: PointerEvent, el?: HTMLElement): void => {
+        if (!this.searchInput.value) {
+            this.searchInput.classList.add('error');
+            this.isError = true;
+            return;
+        }
+
+        const target = el || e.target as HTMLElement;
+        const isLink = target.dataset.link !== undefined;
+
+        const searchPhrase = isLink ? target.innerText : this.searchInput.value;
+
+        this.results = Searchbar.filterSynonyms(searchPhrase);
+
+        dataInstance.results = this.results;
+        routerInstance.itemRoute(isLink ? target : this.searchInput.value);
+    };
+
+
+
     private init = async (): Promise<void> => {
         this.filteredTemp = [];
 
@@ -63,26 +83,6 @@ export class Searchbar {
         this.searchIcon.addEventListener('click', this.handleSearch);
 
         this.overrideEnter();
-    };
-
-
-
-    private handleSearch = (e?: PointerEvent, el?: HTMLElement): void => {
-        if (!this.searchInput.value) {
-            this.searchInput.classList.add('error');
-            this.isError = true;
-            return;
-        }
-
-        const target = el || e.target as HTMLElement;
-        const isLink = target.dataset.link !== undefined;
-
-        const searchPhrase = isLink ? target.innerText : this.searchInput.value;
-
-        this.results = Searchbar.filterSynonyms(searchPhrase);
-
-        dataInstance.results = this.results;
-        routerInstance.itemRoute(isLink ? target : this.searchInput.value);
     };
 
 
