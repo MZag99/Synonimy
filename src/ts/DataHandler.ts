@@ -80,8 +80,14 @@ export default class DataHandler {
             });
 
             objectArray.forEach(obj => {
+
+                const fObj = {
+                    word: obj.word.replace('\r', ''),
+                    synonyms: obj.adjective,
+                };
+
                 const groupObject = {
-                    searchWord: obj,
+                    searchWord: fObj,
                     synonyms: objectArray.filter(objectElem => objectElem !== obj)
                 };
 

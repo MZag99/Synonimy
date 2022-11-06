@@ -138,8 +138,14 @@ function fonts() {
     return gulp.src('src/fonts/**/*').pipe(gulp.dest('dist/fonts'));
 }
 
+// Copy js libraries
 function jsCopy() {
     return gulp.src('src/js/*').pipe(gulp.dest('dist/js'));
+}
+
+// Copy favicon files
+function copyFavicons() {
+    return gulp.src('src/media/favicons/*').pipe(gulp.dest('dist/favicons'));
 }
 
 // Create Javascript bundle from TypeScript sourcefiles
@@ -164,6 +170,7 @@ function tsCompile() {
 
 exports.watch = series(
     clear,
+    copyFavicons,
     tsCompile,
     compileHandlebars,
     copyPages,
@@ -175,6 +182,7 @@ exports.watch = series(
 );
 exports.build = series(
     clear,
+    copyFavicons,
     tsCompile,
     compileHandlebars,
     copyPages,

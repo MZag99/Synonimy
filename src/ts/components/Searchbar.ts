@@ -31,7 +31,9 @@ export class Searchbar {
     public static filterSynonyms = (arg: string): IGroupObject[] => {
         const dataObj = dataInstance as DataHandler;
 
-        return dataObj.groupArray.filter(el => el.searchWord.word === arg);
+        console.log(dataObj.groupArray.filter(el => el.searchWord.word.toLowerCase() === arg.toLowerCase()));
+
+        return dataObj.groupArray.filter(el => el.searchWord.word.toLowerCase() === arg.toLowerCase());
     };
 
 
@@ -43,12 +45,12 @@ export class Searchbar {
             return;
         }
 
-        const target = el || e.target as HTMLElement;
-        const isLink = target.dataset.link !== undefined;
+        const target = el || e?.target as HTMLElement;
+        const isLink = target?.dataset.link !== undefined;
 
         const searchPhrase = isLink ? target.innerText : this.searchInput.value;
 
-        this.results = Searchbar.filterSynonyms(searchPhrase);
+        this.results = Searchbar.filterSynonyms(searchPhrase.toLowerCase());
 
         dataInstance.results = this.results;
         routerInstance.itemRoute(isLink ? target : this.searchInput.value);
@@ -124,7 +126,8 @@ export class Searchbar {
         const selected = els[this.selectIndex - 1] as HTMLElement;
 
         els.forEach(el => el.classList.remove('is-selected'));
-        this.searchInput.value = selected?.innerText;
+
+        if (selected) { this.searchInput.value = selected?.innerText; }
 
         selected?.classList.add('is-selected');
     };

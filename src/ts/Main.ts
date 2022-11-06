@@ -4,8 +4,8 @@ import Router from './Router';
 import { WordView } from './components/WordView';
 import DataHandler from './DataHandler';
 
-export let routerInstance;
-export let wordViewInstance;
+export let routerInstance: Router;
+export let wordViewInstance: WordView;
 
 export class Main {
     private text: string;
@@ -21,7 +21,6 @@ export class Main {
 
 
     public init = (): void => {
-        console.log(this.text);
 
         this.dataHandler = new DataHandler();
         this.scroll = new Scroll();

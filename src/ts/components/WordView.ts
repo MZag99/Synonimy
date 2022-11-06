@@ -17,26 +17,46 @@ export class WordView {
     }
 
     public update = async (): Promise<void> => {
+
         this.getElems();
 
         const url = new URL(window.location.href);
         const pathname = url.pathname.replace('/synonim', '');
         const word = decodeURIComponent(pathname).replace('/', '');
 
-        if (!(await this.checkInclusion(word))) {
+        if (!(await this.checkInclusion(word.toLowerCase()))) {
             document.body.classList.add('no-word-error');
         }
 
-        this.word.forEach(el => el.innerText = word);
+        this.word.forEach(el => el.innerText = `"${word}"`);
 
-        if (!dataInstance.results) {
-            this.results = Searchbar.filterSynonyms(word);
-        } else {
-            this.results = dataInstance.results;
-        }
+        this.results = Searchbar.filterSynonyms(word.toLowerCase());
 
         this.getSynonyms();
-        this.populateList();
+        await this.populateList();
+        this.overrideLinks();
+
+        document.body.classList.add('is-loaded');
+    };
+
+
+
+    private overrideLinks = (): void => {
+        const links = [...this.list.querySelectorAll('a[href]')];
+
+        links.forEach((el:HTMLAnchorElement) => {
+            el.onclick = e => {
+                e.preventDefault();
+                document.body.classList.remove('is-loaded');
+                // Override links behaviour here:
+                const target = e.target as HTMLElement;
+                const searchPhrase = target.innerText;
+                const fSearchPhrase = searchPhrase.replace(/ *\([^)]*\) */g, '');
+
+                this.clearList();
+                routerInstance.itemRoute(fSearchPhrase);
+            };
+        });
     };
 
 
@@ -70,12 +90,17 @@ export class WordView {
 
 
 
-    private populateList = (): void => {
-
+    private clearList = (): void => {
         this.list.innerHTML = '';
+        this.synonyms = [];
+    };
 
+
+
+    private populateList = async (): Promise<void> => new Promise((resolve, reject) => {
         this.synonyms.forEach(el => {
             const liEl = document.createElement('li');
+            liEl.innerHTML = '<span style="font-size:25px; margin-right:5px">&#8226;</span>';
             const a = document.createElement('a');
             a.innerHTML = el.word;
             a.href = `/synonim/${el.word}`;
@@ -92,14 +117,15 @@ export class WordView {
 
                 const value = a.innerText.replace(/ *\([^)]*\) */g, '');
                 routerInstance.itemRoute(value);
-                console.log(this.results);
                 this.update();
             };
 
             liEl.appendChild(a);
             this.list.appendChild(liEl);
         });
-    };
+
+        setTimeout(() => resolve(), 200);
+    });
 
 
 

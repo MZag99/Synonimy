@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^https://michalzagojski.pl/synonim
+RewriteCond %{REQUEST_URI} /(.+) [NC]
+RewriteRule (.*) https://michalzagojski.pl/ [R=301,L]
+RewriteCond %{HTTP_HOST} ^https://michalzagojski.pl/synonim
+RewriteCond %{REQUEST_URI} /(.+) [NC]
+RewriteRule (.*) https://michalzagojski.pl/ [R=301,L]
